@@ -11,12 +11,9 @@
 | 1 | [Лабораторна робота 1](Labs/Lab1-2/) | Генератори та ітератори |
 | 2 | [Лабораторна робота 2](Labs/Lab1-2/) | Налаштування проєкту |
 
-
-
-
 </td>
-<td align="center" valign="middle">
-  <img src="cat.jpg" alt="cat" width="150" style="border-radius: 10px;">
+<td align="center" valign="middle" width="200">
+  <img src="cat.jpg" alt="cat" height="150" style="border-radius: 10px; object-fit: contain;">
 </td>
 </tr>
 </table>
