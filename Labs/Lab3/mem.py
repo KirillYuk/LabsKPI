@@ -6,15 +6,15 @@ def memo():
     def decorator(func):
         @wraps(func)
 
-        def wraper(*args, **kwards):
-            key = str(args) + str(kwards)
+        def wrapper(*args, **kwargs):
+            key = str(args) + str(kwargs)
 
             if key in cache:
                 return cache[key]
             
-            res = func(*args, **kwards)
+            res = func(*args, **kwargs)
             cache[key] = res
 
             return res
-        return wraper
+        return wrapper
     return decorator
