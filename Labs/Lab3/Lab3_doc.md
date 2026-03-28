@@ -2,9 +2,7 @@
 ### Створено декоратор `memo`. Він дозволяє кешувати результати функції.
 
 **test.py**
-```python 
-from mem import memo
-
+```python
 @memo()
 def multiply(x):
     print("calc for", x)
@@ -35,9 +33,7 @@ calc for 5
 ### Додано підтримку іменованих параметрів (`kwards`).
 
 **test.py**
-```python 
-from mem import memo
-
+```python
 @memo()
 def multiply(x, y=1):
     print("calc", x, "*", y)
@@ -81,8 +77,6 @@ calc 6 * 4
 
 **test.py**
 ```python 
-from mem import memo
-
 @memo(max_size=2)
 def multiply(x, y=1):
     print("calc", x, "*", y)
@@ -114,3 +108,35 @@ calc 5 * 3
 25
 ```
 В результатах тестування бачимо що результат **3 * 1** було видалено з кешу через обмеження його розміру до 2 ключів. А результат **5 * 5** не зазанав видалення, бо якраз помістився в обмежений кеш.
+
+### `LRU`
+
+Реалізовано LRU стратегію. Тепер при переповненні кешу видаляється той елемент, до якого найдовше не звертались.
+
+**test.py**
+```python 
+@memo(max_size=2, strategy="lru")
+def multiply(x, y=2):
+    print("calc", x, "*", y)
+    return x * y
+
+print(multiply(1))
+print(multiply(2))
+print(multiply(1))
+print(multiply(3))
+print(multiply(2))
+```
+
+**output:**
+```
+calc 1 * 2
+2
+calc 2 * 2
+4
+2
+calc 3 * 2
+6
+calc 2 * 2
+4
+```
+З результатів тестування видно, що значення "2" було видалено, оскільки до нього найдовше не звертались.
