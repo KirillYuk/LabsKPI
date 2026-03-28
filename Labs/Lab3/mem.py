@@ -1,6 +1,6 @@
 from functools import wraps
 
-def memo():
+def memo(max_size=None):
     cache = {}
 
     def decorator(func):
@@ -13,6 +13,11 @@ def memo():
                 return cache[key]
             
             res = func(*args, **kwargs)
+
+            if max_size is not None and len(cache) >= max_size:
+                first_key = next(iter(cache))
+                del cache[first_key]
+                
             cache[key] = res
 
             return res
