@@ -2,7 +2,7 @@ import time
 from functools import wraps
 
 
-def memo(max_size=None, strategy="lru", ttl=None):
+def memo(max_size=None, strategy="lru", ttl=None, custom=None):
     cache = {}
     access_time = {}
     create_time = {}
@@ -12,7 +12,6 @@ def memo(max_size=None, strategy="lru", ttl=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             key = str(args) + str(sorted(kwargs.items()))
-            print("key:", key) #debag
             now = time.time()
 
             if ttl is not None and key in cache:
@@ -30,7 +29,9 @@ def memo(max_size=None, strategy="lru", ttl=None):
             res = func(*args, **kwargs)
 
             if max_size is not None and len(cache) >= max_size:
-                if strategy == "lru":
+                if custom is not None:
+                    to_del = custom(cache, access_time, use_count)
+                elif strategy == "lru":
                     to_del = min(access_time, key=access_time.get)
                 elif strategy == "lfu":
                     to_del = min(use_count, key=use_count.get)
