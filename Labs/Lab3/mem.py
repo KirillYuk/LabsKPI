@@ -10,7 +10,8 @@ def memo(max_size=None, strategy="lru"):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            key = str(args) + str(kwargs)
+            key = (str(args) + str(sorted(kwargs.items())))
+            print("key:", key) #debag
             now = time.time()
 
             if key in cache:
