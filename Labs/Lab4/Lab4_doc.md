@@ -112,3 +112,42 @@ C
 [(0, 5, 'A'), (1, 1, 'B'), (2, 3, 'C')]
 ```
 Просто вивід елементів за обраним режимом.
+
+
+### Bug fix
+Баг полягає в тому, що коли черга пуста функції dequeue та peek видають помилку:
+
+**main.py**
+```python
+from queue import BiQueue
+
+q = BiQueue()
+
+print(q.peek('highest'))
+print(q.peek('lowest'))
+print(q.peek('oldest'))
+print(q.peek('newest'))
+print(q.queue)
+```
+
+**output:**
+```
+ValueError: max() iterable argument is empty
+```
+Баг виправлено через додавання перевірки довжини черги:
+
+```python
+def dequeue(self, mode):
+    if len(self.queue) == 0:
+        return None
+```
+
+**output:**
+```
+None
+None
+None
+None
+[]
+```
+

@@ -4,10 +4,14 @@ class BiQueue:
         self.counter = 0
     
     def enqueue(self, item, priority):
-        self.queue.append((self.counter, priority,item))
-        self.counter +=1
+        self.queue.append((self.counter, priority, item))
+        self.counter += 1
+
 
     def dequeue(self, mode):
+        if len(self.queue) == 0:
+            return None
+
         if mode == 'highest':
             item = max(self.queue, key=lambda x: x[1])
         elif mode == 'lowest':
@@ -20,7 +24,11 @@ class BiQueue:
         self.queue.remove(item)
         return item[2]
 
+
     def peek(self, mode):
+        if len(self.queue) == 0:
+            return None
+
         if mode == 'highest':
             item = max(self.queue, key=lambda x: x[1])
         elif mode == 'lowest':
