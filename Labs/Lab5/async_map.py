@@ -17,3 +17,7 @@ def async_map_callback(arr, fn, callback):
             callback(e, None)
 
     asyncio.run(run())
+
+async def async_map_promise(arr, fn):
+    results = await asyncio.gather(*[fn(item) for item in arr])
+    return results
