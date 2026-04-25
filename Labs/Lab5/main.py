@@ -13,7 +13,7 @@ async def main():
     async def cancel_after():
         await asyncio.sleep(2)
         cancel.set()
-        print("cancel signal")
+        print("!cancel signal!")
     
     asyncio.create_task(cancel_after())
     result = await async_map_await([1, 2], double, cancel)

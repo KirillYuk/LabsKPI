@@ -154,7 +154,7 @@ result None
 ```
 
 Знайдено баг. Якщо сигнал скасування приходить під час обробки останнього елемента то функція повертає результат замість None.
->Можливо буде виправлено.
+>~~Можливо буде виправлено.~~ **Виправлено**
 
 **main.py**
 ```python
@@ -191,6 +191,47 @@ result [2, 4]
 ```
 
 Сигнал був, але операцію не відмінено.
+
+### Скасування bug fix
+
+Виправлено. Також додано перевірку на пустий масив. 
+
+**main.py**
+```python
+import time
+import asyncio
+from async_map import async_map_promise, async_map_await
+
+
+async def double(x):
+    await asyncio.sleep(1) 
+    return x * 2
+
+async def main():
+    cancel = asyncio.Event()
+    
+    async def cancel_after():
+        await asyncio.sleep(2)
+        cancel.set()
+        print("!cancel signal!")
+    
+    asyncio.create_task(cancel_after())
+    result = await async_map_await([1, 2], double, cancel)
+    print("result", result)
+    
+asyncio.run(main())
+```
+
+**output:**
+```
+!cancel signal!
+canceled after las element
+result None
+
+[Done] exited with code=0 in 2.258 seconds
+```
+
+
 
 
 
