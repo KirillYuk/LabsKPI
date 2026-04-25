@@ -83,6 +83,114 @@ asyncio.run(main())
 result:  [4, 2, 16]
 ```
 
+### async/await
+Реалізовано послідовну версію через цикл.
+
+**main.py**
+```python
+import time
+import asyncio
+from async_map import async_map_promise, async_map_await
+
+
+async def double(x):
+    await asyncio.sleep(1) 
+    return x * 2
+
+async def main():
+    start = time.time()
+    result = await async_map_promise([2, 1, 8], double)
+    print("result1: ", result, time.time() - start, "c")
+
+    start = time.time()
+    result = await async_map_await([2, 1, 8], double)
+    print("result2: ", result, time.time() - start, "c")
+
+asyncio.run(main())
+```
+
+**output:**
+```
+result1:  [4, 2, 16] 1.010911226272583 c
+result2:  [4, 2, 16] 3.0216171741485596 c
+```
+
+### Скасування
+Додаємо скасування до послідовної версії (async_map_await).
+
+**main.py**
+```python
+import time
+import asyncio
+from async_map import async_map_promise, async_map_await
+
+
+async def double(x):
+    await asyncio.sleep(1) 
+    return x * 2
+
+async def main():
+    cancel = asyncio.Event()
+    
+    async def cancel_after():
+        await asyncio.sleep(2)
+        cancel.set()
+        print("cancel signal")
+    
+    asyncio.create_task(cancel_after())
+    result = await async_map_await([1, 2, 3], double, cancel)
+    print("result", result)
+    
+asyncio.run(main())
+```
+
+**output:**
+```
+cancel signal
+canceled
+result None
+
+[Done] exited with code=0 in 2.203 seconds
+```
+
+Знайдено баг. Якщо сигнал скасування приходить під час обробки останнього елемента то функція повертає результат замість None.
+>Можливо буде виправлено.
+
+**main.py**
+```python
+import time
+import asyncio
+from async_map import async_map_promise, async_map_await
+
+
+async def double(x):
+    await asyncio.sleep(1) 
+    return x * 2
+
+async def main():
+    cancel = asyncio.Event()
+    
+    async def cancel_after():
+        await asyncio.sleep(2)
+        cancel.set()
+        print("cancel signal")
+    
+    asyncio.create_task(cancel_after())
+    result = await async_map_await([1, 2], double, cancel)
+    print("result", result)
+    
+asyncio.run(main())
+```
+
+**output:**
+```
+cancel signal
+result [2, 4]
+
+[Done] exited with code=0 in 2.201 seconds
+```
+
+Сигнал був, але операцію не відмінено.
 
 
 

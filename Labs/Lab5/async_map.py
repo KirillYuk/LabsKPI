@@ -23,9 +23,12 @@ async def async_map_promise(arr, fn):
     return results
 
 
-async def async_map_await(arr, fn):
+async def async_map_await(arr, fn, cancel=None):
     results = []
     for item in arr:
+        if cancel and cancel.is_set():
+            print("canceled")
+            return None
         result = await fn(item)
         results.append(result)
     return results

@@ -8,13 +8,15 @@ async def double(x):
     return x * 2
 
 async def main():
-    start = time.time()
-    result = await async_map_promise([2, 1, 8], double)
-    print("result1: ", result, time.time() - start, "c")
-
-    start = time.time()
-    result = await async_map_await([2, 1, 8], double)
-    print("result2: ", result, time.time() - start, "c")
-
-
+    cancel = asyncio.Event()
+    
+    async def cancel_after():
+        await asyncio.sleep(2)
+        cancel.set()
+        print("cancel signal")
+    
+    asyncio.create_task(cancel_after())
+    result = await async_map_await([1, 2], double, cancel)
+    print("result", result)
+    
 asyncio.run(main())
