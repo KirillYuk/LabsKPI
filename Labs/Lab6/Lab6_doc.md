@@ -15,6 +15,28 @@ for line in generate_data(5):
 value0 value1 value2 value3 value4
 ```
 
+### Sync generator stream
+Реалізовано стрім який приймає джерело даних і віддає елементи по одному
+
+**main.py**
+```python
+from stream import generate_data, read_stream
+
+for item in read_stream(generate_data(5)):
+    print(item)
+```
+
+**output:**
+```
+value0
+value1
+value2
+value3
+value4
+```
+
+
+
 ### Приклади використання
 ...
 

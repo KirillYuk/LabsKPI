@@ -1,4 +1,4 @@
-from stream import generate_data
+from stream import generate_data, read_stream
 
-for line in generate_data(5):
-    print(line, end=' ')
+for item in read_stream(generate_data(5)):
+    print(item)
