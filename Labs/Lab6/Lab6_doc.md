@@ -35,6 +35,32 @@ value3
 value4
 ```
 
+### Chunk processing pipeline
+Реалізовано обробку даних стріма. Приймає стрім і функцію **fn** яку застосовує до кожного елементу по одному
+
+**main.py**
+```python
+from stream import generate_data, read_stream, process_stream
+
+
+def to_upper(item):
+    return item.upper()
+
+pipeline = process_stream(read_stream(generate_data(5)), to_upper)
+
+for item in pipeline:
+    print(item)
+```
+
+**output:**
+```
+VALUE0
+VALUE1
+VALUE2
+VALUE3
+VALUE4
+```
+
 
 
 ### Приклади використання

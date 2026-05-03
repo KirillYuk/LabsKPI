@@ -5,3 +5,7 @@ def generate_data(n):
 def read_stream(source):
     for item in source:
         yield item.strip()
+        
+def process_stream(sourse, fn):
+    for item in sourse:
+        yield fn(item)
