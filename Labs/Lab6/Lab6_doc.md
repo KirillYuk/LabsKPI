@@ -90,6 +90,41 @@ VALUE3
 VALUE4
 ```
 
+### Memory monitoring
+Реалізовано відстеження використання пам`яті через бібліотеку [tracemalloc](https://docs.python.org/uk/3/library/tracemalloc.html)
+
+**main.py**
+```python
+import asyncio
+import tracemalloc
+from stream import generate_data, read_stream, process_stream, async_process_stream, async_read_stream
+
+
+def to_upper(item):
+    return item.upper()
+
+tracemalloc.start()
+data = list(generate_data(100000))
+current, peak = tracemalloc.get_traced_memory()
+print("without stream, peak memory: ", peak/1024, "KB")
+tracemalloc.stop()
+
+tracemalloc.start()
+pipeline = process_stream(read_stream(generate_data(100000)), to_upper)
+for item in pipeline:
+    pass
+current, peak = tracemalloc.get_traced_memory()
+print("with stream, peak memory: ", peak/1024, "KB")
+tracemalloc.stop()
+```
+
+**output:**
+```
+without stream, peak memory:  5752.1328125 KB
+with stream, peak memory:  1.6083984375 KB
+```
+Результат показує що стрім використовує в сотні разів менше пам'яті.
+
 
 ### Приклади використання
 ...
