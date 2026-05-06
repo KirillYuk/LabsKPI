@@ -61,6 +61,34 @@ VALUE3
 VALUE4
 ```
 
+### Async iterator stream
+Реалізовано асинхронні версії тих самих функцій. Використовуються в асинхронному коді через `async for`. Дозволяють не блокувати *event loop* поки обробляються дані.
+
+**main.py**
+```python
+import asyncio
+from stream import generate_data, read_stream, process_stream, async_process_stream, async_read_stream
+
+
+def to_upper(item):
+    return item.upper()
+
+async def main():
+    source = async_read_stream(generate_data(5))
+    async for item in async_process_stream(source, to_upper):
+        print(item)
+        
+asyncio.run(main())
+```
+
+**output:**
+```
+VALUE0
+VALUE1
+VALUE2
+VALUE3
+VALUE4
+```
 
 
 ### Приклади використання
